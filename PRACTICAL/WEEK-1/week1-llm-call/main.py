@@ -1,24 +1,17 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
+import ollama
 
 # Step 1: Load environment variables from .env
 load_dotenv()
 
-# Step 2: Read Ollama settings from .env
+# Step 2: Read Ollama model from .env
 model = os.getenv("OLLAMA_MODEL", "llama3.2")
-base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
-# Step 3: Initialize OpenAI client pointing to local Ollama endpoint
-client = OpenAI(
-    base_url=f"{base_url}/v1",
-    api_key="ollama",  # Required by the OpenAI SDK, but ignored by Ollama
-)
-
-# Step 4: Send prompt to the model
-print(f"Connecting to Ollama model '{model}' at {base_url}...")
+# Step 3: Send prompt to the model using native Ollama library
+print(f"Connecting to Ollama model '{model}'...")
 try:
-    response = client.chat.completions.create(
+    response = ollama.chat(
         model=model,
         messages=[
             {
@@ -28,9 +21,9 @@ try:
         ],
     )
 
-    # Step 5: Display the generated answer
+    # Step 4: Display the generated answer
     print("\nLLM Response:")
-    print(response.choices[0].message.content)
+    print(response["message"]["content"])
 
 except Exception as e:
     print(f"\nError: {e}")
