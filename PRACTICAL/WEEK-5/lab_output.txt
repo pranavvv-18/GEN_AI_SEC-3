@@ -1,0 +1,31 @@
+﻿=== BUDGET PLANNER OUTPUT ===
+
+TOKEN ECONOMICS REPORT
+-----------------------------------
+Input tokens/day:  2,400,000
+Output tokens/day: 600,000
+Total tokens/day:  3,000,000
+Estimated daily cost:   $1.4400
+Estimated monthly cost: $43.20
+Peak RPM with margin: 36.0
+Peak TPM with margin: 54000
+
+CHECKS
+RPM capacity: PASS
+TPM capacity: PASS
+Daily budget: PASS
+Monthly budget: REVIEW
+
+Recommendation: REVISE assumptions, limits, or design before build.
+
+
+=== UNIT TEST RESULTS ===
+test_capacity_passes (__main__.TestFeatureBudget.test_capacity_passes) ... ok
+test_cost_estimate (__main__.TestFeatureBudget.test_cost_estimate) ... ok
+test_monthly_budget_fails (__main__.TestFeatureBudget.test_monthly_budget_fails) ... ok
+test_rpm_limit_fails (__main__.TestFeatureBudget.test_rpm_limit_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
