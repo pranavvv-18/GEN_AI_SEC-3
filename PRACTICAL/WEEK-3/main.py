@@ -27,11 +27,13 @@ try:
     # Select AI provider
     if choice == "1":
         api_key = os.getenv("GEMINI_API_KEY")
+        model = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
         if not api_key:
             raise ValueError("Gemini API key not found in .env")
-        provider = GeminiProvider(api_key)
+        provider = GeminiProvider(api_key, model)
     elif choice == "2":
-        provider = OllamaProvider("llama3.2")
+        model = os.getenv("OLLAMA_MODEL", "llama3.2")
+        provider = OllamaProvider(model)
     else:
         raise ValueError("Invalid selection. Choose 1 or 2.")
 

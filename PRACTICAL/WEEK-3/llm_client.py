@@ -18,25 +18,18 @@ class LLMProvider(ABC):
 # 2. Gemini Provider
 # --------------------------------
 class GeminiProvider(LLMProvider):
-    def __init__(self, api_key):
+    def __init__(self, api_key, model="gemini-3.8-flash"):
         self.client = genai.Client(
             api_key=api_key,
             http_options=types.HttpOptions(timeout=30000)
         )
-        self.model = "gemini-2.5-flash"
+        self.model = model
 
     def generate(self, prompt):
-        try:
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=prompt
-            )
-        except Exception:
-            self.model = "gemini-2.0-flash"
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=prompt
-            )
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=prompt
+        )
         usage = response.usage_metadata
         input_tokens = (
             usage.prompt_token_count if usage else 0
@@ -131,7 +124,7 @@ class LLMClient:
             except Exception as error:
                 last_error = error
                 # Retry only likely temporary failures
-                status_code = getattr(error, "status_code", None)
+                status_code = getattr(error, "status_code", getattr(error, "code", None))
                 retryable = (
                     isinstance(
                         error,
