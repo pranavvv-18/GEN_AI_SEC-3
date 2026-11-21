@@ -172,5 +172,5 @@ class LLMClient:
             self.logger.log_call(failed_log)
         except Exception as log_error:
             print("MongoDB logging error:", log_error)
-        raise last_error
+        raise 
 

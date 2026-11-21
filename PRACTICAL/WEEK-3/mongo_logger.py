@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from datetime import datetime, timezone
+from datetime import datetime, timezone     
 
 class MongoLogger:
     def __init__(self):

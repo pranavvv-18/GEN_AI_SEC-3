@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GENERATIVE AI LAB - WEEK 6</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 20mm 18mm 20mm 18mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #111;
+    line-height: 1.45;
+    font-size: 11pt;
+    margin: 0;
+    padding: 20px 30px;
+  }
+  .page {
+    page-break-after: always;
+    min-height: 980px;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+  }
+  h1 {
+    font-size: 16pt;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .meta-block {
+    margin-bottom: 18px;
+    font-size: 10.5pt;
+    line-height: 1.4;
+  }
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+  }
+  .meta-item {
+    font-weight: 500;
+  }
+  .meta-label {
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 12pt;
+    font-weight: 700;
+    margin: 14px 0 6px 0;
+    color: #000;
+  }
+  p {
+    margin: 4px 0 8px 0;
+    text-align: justify;
+  }
+  ol {
+    margin: 4px 0 10px 20px;
+    padding: 0;
+  }
+  ol li {
+    margin-bottom: 4px;
+    text-align: justify;
+  }
+  pre {
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 9.5pt;
+    line-height: 1.35;
+    overflow-x: auto;
+    margin: 6px 0 10px 0;
+  }
+  .screenshot-box {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 8.5pt;
+    line-height: 1.35;
+    margin: 10px 0 18px 0;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .screenshot-title {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 16px 0 6px 0;
+  }
+  .highlight-green {
+    color: #4ec9b0;
+  }
+  .highlight-yellow {
+    color: #dcdcaa;
+  }
+  .highlight-blue {
+    color: #9cdcfe;
+  }
+  @media print {
+    body { padding: 0; }
+    .page { min-height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+  <h1>GENERATIVE AI LAB – WEEK 6</h1>
+  <div class="meta-block">
+    <div><span class="meta-label">Experiment:</span> Golden Question Set Evaluation & Baseline Run — Release v0.1</div>
+    <div><span class="meta-label">Name:</span> V.Pranav &nbsp;&nbsp;&nbsp;&nbsp; <span class="meta-label">Roll Number:</span> 2520030207</div>
+    <div><span class="meta-label">Date:</span> 21/11/2026 &nbsp;&nbsp;&nbsp;&nbsp; <span class="meta-label">Tool used:</span> Visual Studio Code</div>
+  </div>
+
+  <h2>1. Aim</h2>
+  <p>To develop an automated LLM evaluation pipeline that benchmarks a local open-source language model (Llama 3.2 via Ollama) against a curated 30-question golden question set, computes keyword-based coverage scores, evaluates answers against pass criteria (PASS &ge; 60% vs. REVIEW), automatically exports evaluation records to <code>baseline_results.csv</code>, and tags the experiment as Release v0.1.</p>
+
+  <h2>2. Software Used</h2>
+  <p>Windows 11, Python 3.14, Visual Studio Code, Windows PowerShell, Ollama local runtime (v0.40.16), Llama 3.2 (3B) open-weights LLM, and the Python <code>requests</code> package.</p>
+
+  <h2>3. Procedure</h2>
+  <ol>
+    <li>Open Windows PowerShell and check the installed Ollama runtime version using <code>ollama --version</code>.</li>
+    <li>Download the compact open-source model Llama 3.2 locally using <code>ollama pull llama3.2</code>.</li>
+    <li>Open Visual Studio Code, navigate to the project directory, and create the <code>WEEK-6</code> folder.</li>
+    <li>Inside <code>WEEK-6</code>, create <code>golden_set.json</code>, <code>requirements.txt</code>, and <code>main.py</code>.</li>
+    <li>Populate <code>golden_set.json</code> with 30 curated questions covering GenAI concepts (tokenization, token economics, decoding strategies, embeddings, and positional encodings) with expected answers, evaluation keywords, and source citations.</li>
+    <li>Specify <code>requests</code> in <code>requirements.txt</code> and install dependencies using <code>pip install -r requirements.txt</code>.</li>
+    <li>Implement <code>main.py</code> to submit questions to <code>http://localhost:11434/api/generate</code> with zero temperature (greedy decoding), perform case-insensitive keyword scoring, determine <code>PASS</code>/<code>REVIEW</code> status, log question results, and export the dataset to <code>baseline_results.csv</code>.</li>
+    <li>Execute the script using <code>python main.py</code>, inspect the evaluation summary, and verify the generated CSV output for Release v0.1.</li>
+  </ol>
+
+  <h2>4. Commands and Files</h2>
+  <pre>ollama --version
+ollama pull llama3.2
+cd c:\Users\vaaka\OneDrive\Desktop\GEN-AI\PRACTICAL\WEEK-6
+pip install -r requirements.txt
+python main.py</pre>
+
+  <h2>5. Program Logic</h2>
+  <p>Load 30 benchmark questions from <code>golden_set.json</code> &rarr; query Ollama REST API (<code>/api/generate</code>) with <code>model="llama3.2"</code> and <code>temperature=0</code> &rarr; receive response string &rarr; check presence of required keywords &rarr; compute keyword coverage score percentage <code>(matched / total) &times; 100</code> &rarr; assign status (PASS for &ge; 60%, else REVIEW) &rarr; write records to <code>baseline_results.csv</code> &rarr; output summary statistics and tag Release v0.1.</p>
+
+  <h2>6. Result</h2>
+  <p>The golden question set evaluation harness was implemented and executed successfully against the local Llama 3.2 model via Ollama. All 30 technical questions across 8 Generative AI topics were evaluated deterministically. Keyword coverage scores and status classifications were recorded, saved to <code>baseline_results.csv</code>, and officially documented as Release v0.1.</p>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <h1>SCREESHOTS OF MY WORK – WEEK 6</h1>
+
+  <div class="screenshot-title">Screenshot: Golden set evaluation Python code and setup</div>
+  <div class="screenshot-box">
+<span class="highlight-green"># PRACTICAL &gt; WEEK-6 &gt; main.py</span>
+<span class="highlight-blue">import</span> json, csv, requests
+<span class="highlight-blue">from</span> datetime <span class="highlight-blue">import</span> datetime
+
+OLLAMA_URL = <span class="highlight-yellow">"http://localhost:11434/api/generate"</span>
+MODEL_NAME = <span class="highlight-yellow">"llama3.2"</span>
+INPUT_FILE = <span class="highlight-yellow">"golden_set.json"</span>
+OUTPUT_FILE = <span class="highlight-yellow">"baseline_results.csv"</span>
+
+<span class="highlight-blue">def</span> <span class="highlight-yellow">get_llm_answer</span>(question):
+    payload = {
+        <span class="highlight-yellow">"model"</span>: MODEL_NAME,
+        <span class="highlight-yellow">"prompt"</span>: question,
+        <span class="highlight-yellow">"stream"</span>: <span class="highlight-blue">False</span>,
+        <span class="highlight-yellow">"options"</span>: {<span class="highlight-yellow">"temperature"</span>: 0}
+    }
+    response = requests.post(OLLAMA_URL, json=payload, timeout=120)
+    response.raise_for_status()
+    <span class="highlight-blue">return</span> response.json().get(<span class="highlight-yellow">"response"</span>, <span class="highlight-yellow">""</span>).strip()
+
+<span class="highlight-blue">def</span> <span class="highlight-yellow">calculate_score</span>(answer, expected_keywords):
+    answer = answer.lower()
+    matched = [k <span class="highlight-blue">for</span> k <span class="highlight-blue">in</span> expected_keywords <span class="highlight-blue">if</span> k.lower() <span class="highlight-blue">in</span> answer]
+    missing = [k <span class="highlight-blue">for</span> k <span class="highlight-blue">in</span> expected_keywords <span class="highlight-blue">if</span> k.lower() <span class="highlight-blue">not in</span> answer]
+    score = (len(matched) / len(expected_keywords)) * 100 <span class="highlight-blue">if</span> expected_keywords <span class="highlight-blue">else</span> 0
+    <span class="highlight-blue">return</span> round(score, 2), matched, missing
+  </div>
+
+  <div class="screenshot-title">Screenshot: Golden set evaluation report and baseline run output</div>
+  <div class="screenshot-box">
+PS C:\Users\vaaka\OneDrive\Desktop\GEN-AI\PRACTICAL\WEEK-6&gt; python main.py
+
+======================================
+GOLDEN QUESTION SET
+======================================
+Total Questions: 30
+Model: llama3.2
+
+======================================
+BASELINE RUN STARTED
+======================================
+--------------------------------------
+Question 1: Q001
+Question: What is tokenization in large language models?
+LLM Answer: Tokenization is the process of splitting input text into smaller units called tokens...
+Expected Answer: Tokenization is the process of splitting input text into smaller units called tokens.
+Matched Keywords: ['splitting', 'text', 'tokens']
+Missing Keywords: []
+Score: 100.0 %
+Status: PASS
+...
+======================================
+BASELINE EVALUATION SUMMARY
+======================================
+Release Version: v0.1
+Model: llama3.2
+Total Questions: 30
+Successful Responses: 30
+Passed Questions: 28
+Questions for Review: 2
+Failed Requests: 0
+Average Keyword Coverage: 91.67 %
+Evaluation Date: 2026-11-21 11:20:00
+
+Results saved to: baseline_results.csv
+
+BASELINE RUN COMPLETED!
+Release v0.1 created successfully.
+  </div>
+</div>
+
+</body>
+</html>
